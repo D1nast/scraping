@@ -1,7 +1,4 @@
 #必要なもの　seleniumのgem open-urlのgem csvのgem rubyの実行環境
-
-# encoding: utf-8
-
 require 'open-uri'
 require 'csv'
 require "selenium-webdriver"
