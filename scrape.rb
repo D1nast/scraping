@@ -23,9 +23,9 @@ def getData(n)
 
     driver.quit
 
-    CSV.open("output.csv", "w") do |csv|
+    CSV.open("output.csv", "w", encoding: "UTF-8") do |csv|
         data.each do |row|
-            csv << row
+            csv << [row]
         end
     end
 end
