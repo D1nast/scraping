@@ -1,5 +1,7 @@
 #必要なもの　seleniumのgem open-urlのgem csvのgem rubyの実行環境
 
+# encoding: utf-8
+
 require 'open-uri'
 require 'csv'
 require "selenium-webdriver"
@@ -23,7 +25,7 @@ def getData(n)
 
     driver.quit
 
-    CSV.open("output.csv", "w", encoding: "UTF-8") do |csv|
+    CSV.open("output.csv", "w",encoding: "Shift_JIS") do |csv|
         data.each do |row|
             csv << [row]
         end
