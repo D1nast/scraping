@@ -1,23 +1,33 @@
-require 'nokogiri'
+#必要なもの　seleniumのgem open-urlのgem csvのgem rubyの実行環境
+
 require 'open-uri'
 require 'csv'
+require "selenium-webdriver"
 
-url = 'https://www.lancers.jp/work/detail/4512081'
-html = URI.open(url).read
-doc = Nokogiri::HTML.parse(html)
-title = doc.title
 
-puts title
+def getData(n)
+    data = []
 
-# 出力するデータ
-data = [
-  [title],
-  [title],
-]
+    driver = Selenium::WebDriver.for :chrome
+    driver.get "https://minkabu.jp/yutai/popular_ranking"
 
-# CSVファイルに書き出す
-CSV.open("output.csv", "w") do |csv|
-  data.each do |row|
-    csv << row
-  end
+    i = 2
+    n.times do
+        link =  driver.find_element(:xpath,"//*[@id=\"month_tab_box\"]/li[#{i}]/a")
+        link.click
+        sleep(5)
+        getTitle = driver.find_element(:xpath,'//*[@id="v-yutai-app"]/div[2]/div[2]/div/div[1]/div/ol/li[1]/div/div/div[1]/div/div[1]/a')
+        i = i + 1
+        data << getTitle.text
+    end
+
+    driver.quit
+
+    CSV.open("output.csv", "w") do |csv|
+        data.each do |row|
+            csv << row
+        end
+    end
 end
+
+getData(12)
