@@ -6,20 +6,19 @@ require "selenium-webdriver"
 
 def getData(n)
     data = []
-
+    i = 2
+    
     driver = Selenium::WebDriver.for :chrome
     driver.get "https://minkabu.jp/yutai/popular_ranking"
+    wait = Selenium::WebDriver::Wait.new(timeout: 10)
 
-    i = 2
     n.times do
-        link =  driver.find_element(:xpath,"//*[@id=\"month_tab_box\"]/li[#{i}]/a")
+        link = wait.until { driver.find_element(:xpath,"//*[@id=\"month_tab_box\"]/li[#{i}]/a") }
         link.click
-        sleep(5)
-        getTitle = driver.find_element(:xpath,'//*[@id="v-yutai-app"]/div[2]/div[2]/div/div[1]/div/ol/li[1]/div/div/div[1]/div/div[1]/a')
+        getTitle = wait.until { driver.find_element(:xpath,'//*[@id="v-yutai-app"]/div[2]/div[2]/div/div[1]/div/ol/li[1]/div/div/div[1]/div/div[1]/a') }
         i = i + 1
         data << getTitle.text
     end
-
     driver.quit
 
     CSV.open("output.csv", "w",encoding: "Shift_JIS") do |csv|
@@ -27,6 +26,7 @@ def getData(n)
             csv << [row]
         end
     end
+
 end
 
 getData(12)
